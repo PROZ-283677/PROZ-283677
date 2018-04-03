@@ -14,6 +14,11 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
+/**************************
+ * Okienko logowania, PROZ
+ * @author Kacper Klimczuk 
+ * @version v2
+ **************************/
 public class Main extends Application {
 	
 	// utworzenie dialog
@@ -50,18 +55,34 @@ public class Main extends Application {
 	ObservableList<String> h_testowe = FXCollections.observableArrayList("haslo","rower","stopro");
 	ObservableList<String> h_deweloperskie = FXCollections.observableArrayList("jola2","adminadmin","tolus");
 	
+	/**
+	 * Procedura uruchamiajaca okno
+	 * 
+	 * @param args - przekazywany do javafx.application.Application.launch
+	 */
 	public static void main(String[] args) {
 		launch(args);
 	}
 
-	// blokowanie/odblokowywanie logon button
+	/**
+	 * Procedura blokuje/odblokowuje logon button w zaleznosci od tego czy srodowisko i uzytkownik wybrany, a haslo wpisane
+	 * 
+	 * @param args - przekazywany do javafx.application.Application.launch
+	 */
 	private void changed() {
 		loginButton.setDisable(choiceBox.getValue() == null || 
 							   comboBox.getEditor().getText().trim().isEmpty() ||
 							   password.getText().isEmpty() ); 
 	}
 
-	// sprawdzenie czy srodowisko, nazwa uzytkownika i haslo zgadzaja sie ze soba
+	/**
+	 * Metoda sprawdza czy srodowisko, nazwa uzytkownika i haslo zgadzaja sie ze soba
+	 * 
+	 * @param srodowisko - jedna z wartosci: Produkcyjne, Testowe, Deweloperskie
+	 * @param uzytkownik - w zaleznosci od srodowiska wybrany uzytkownik, lub wpisany recznie
+	 * @param haslo - zawiera haslo wpisane do pola password
+	 * @return boolean - jesli srodowisko, nazwa uzytkownika i haslo zgadzaja sie ze soba, zwroci true
+	 */
 	private boolean isPassCorrect(String srodowisko, String uzytkownik, String haslo) {
 		if(choiceBox.getValue() == "Produkcyjne") {
 			for(int i=0; i<produkcyjne.size(); ++i){
@@ -78,15 +99,19 @@ public class Main extends Application {
 				if(deweloperskie.get(i).equals(uzytkownik) && h_deweloperskie.get(i).equals(haslo)) return true;
 			}
 		}
-		else return false;
-
 		return false;
 	}
 	
-	// Konwertuje buttontype na pair
+	/**
+	 * Metoda konwertuje buttontype na pair
+	 * 
+	 * @param buttonType - zwracane przez okno Dialog
+	 * @param loginButtonType - sluzy do sprawdzenia ktory przycisk zostal nacisniety
+	 * @return boolean - para uzytkownik, srodowisko, jesli dane sie zgadzaja, null gdy sie nie zgadzaja
+	 */
 	private Pair<String,String> resultConverter(Optional<ButtonType> buttonType, ButtonType loginButtonType)
 	{
-		if(buttonType.get() == loginButtonType)// && buttonType.isPresent())
+		if(buttonType.get() == loginButtonType)
 		{
 			if(isPassCorrect(choiceBox.getValue(), comboBox.getEditor().getText(), password.getText()))
 				    return new Pair<>(choiceBox.getValue(), comboBox.getEditor().getText() );
@@ -94,6 +119,9 @@ public class Main extends Application {
 		return null;
 	}
 
+	/**
+	 * Metoda ustawiajaca kazdy komponent i pokazujaca rezultat logowania
+	 */
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		
