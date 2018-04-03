@@ -107,7 +107,7 @@ public class Main extends Application {
 	 * 
 	 * @param buttonType - zwracane przez okno Dialog
 	 * @param loginButtonType - sluzy do sprawdzenia ktory przycisk zostal nacisniety
-	 * @return boolean - para uzytkownik, srodowisko, jesli dane sie zgadzaja, null gdy sie nie zgadzaja
+	 * @return Pair<String,String> - para uzytkownik, srodowisko, jesli dane sie zgadzaja, null gdy sie nie zgadzaja
 	 */
 	private Pair<String,String> resultConverter(Optional<ButtonType> buttonType, ButtonType loginButtonType)
 	{
@@ -137,19 +137,19 @@ public class Main extends Application {
 		grid.setPadding(new Insets(20, 10, 10, 50));
 		
 		password.setPromptText("Hasło");
-		password.textProperty().addListener((obs, oldVal, newVal) -> changed());
+		password.textProperty().addListener((observable, oldVal, newVal) -> changed());
 		grid.add(new Label("Hasło:"), 0, 2);
 		grid.add(password, 1, 2);
 		
 		choiceBox.getItems().addAll("Produkcyjne","Testowe","Deweloperskie");
 		choiceBox.setValue("Produkcyjne");
-		choiceBox.valueProperty().addListener((obs, oldVal, newVal) -> changed());
+		choiceBox.valueProperty().addListener((observable, oldVal, newVal) -> changed());
 		grid.add(new Label("Środowisko:"), 0, 0);
 		grid.add(choiceBox, 1, 0);
 		
 		comboBox.setItems(produkcyjne);
 		comboBox.setEditable(true);
-		comboBox.getEditor().textProperty().addListener((obs, oldVal, newVal) -> changed());
+		comboBox.getEditor().textProperty().addListener((observable, oldVal, newVal) -> changed());
 		comboBox.setValue("adam.nowak");
 		grid.add(new Label("Użytkownik:"), 0, 1);
 		grid.add(comboBox, 1, 1);
@@ -162,7 +162,7 @@ public class Main extends Application {
 		dialog.getDialogPane().setContent(grid);
 		
 		// zaleznie od srodowiska, przypisuje listy uzytkownikow
-		choiceBox.getSelectionModel().selectedItemProperty().addListener((v, oldV, newV)-> {
+		choiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldVal, newVal)-> {
 			if(choiceBox.getValue() == "Produkcyjne") comboBox.setItems(produkcyjne);
 			else if(choiceBox.getValue() == "Testowe") comboBox.setItems(testowe);
 			else comboBox.setItems(deweloperskie);
